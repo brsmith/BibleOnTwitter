@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BibleOnTwitter.Infrastructure.Model.Data;
 
 namespace BibleOnTwitter.Infrastructure.Model.View
 {
     public class IndexView
     {
-        public IEnumerable<Author> Authors { get; set; }
-        public IEnumerable<HashTag> HashTags { get; set; }
-        public IEnumerable<BibleTweet> BibleTweets { get; set; }
+        public IEnumerable<Tweet> Tweets { get; set; }
+        public IEnumerable<TagReferenceCounter> TopTags { get; set; }
     }
 }

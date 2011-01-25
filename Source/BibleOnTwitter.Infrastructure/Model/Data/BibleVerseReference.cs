@@ -13,6 +13,8 @@ namespace BibleOnTwitter.Infrastructure.Model.Data
         public virtual int VerseStart { get; set; }
         public virtual int VerseEnd { get; set; }
 
+        public virtual Tweet Tweet { get; set; }
+
         public override string ToString()
         {
             if (VerseEnd == VerseStart)

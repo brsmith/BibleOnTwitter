@@ -5,11 +5,10 @@ using System.Text;
 
 namespace BibleOnTwitter.Infrastructure.Model.View
 {
-    public class Author
+    public class TagReferenceCounter
     {
-        public string Name { get; set; }
-        public string Link { get; set; }
-        public string ImageUrl { get; set; }
+        public string HashTag { get; set; }
         public int TweetCount { get; set; }
+        public int TweetTotalCount { get; set; }
     }
 }

@@ -13,7 +13,15 @@ namespace BibleOnTwitter.Infrastructure.Model.Data
 
     public class Reference
     {
+        public Reference()
+        {
+            Tweets = new List<Tweet>();
+        }
+
         public virtual Guid ReferenceId { get; set; }
         public virtual string Name { get; set; }
+        public virtual ReferenceType Type { get; set; }
+
+        public virtual IList<Tweet> Tweets { get; set; }
     }
 }

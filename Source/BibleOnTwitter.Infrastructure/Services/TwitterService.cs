@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using LinqToTwitter;
 using BibleOnTwitter.Infrastructure.Model.Data;
 
@@ -18,18 +19,25 @@ namespace BibleOnTwitter.Infrastructure.Services
 
         public IEnumerable<AtomEntry> GetBibleTweets(DateTimeOffset? LastTweet)
         {
-            var WeekAgo = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
-            if (!LastTweet.HasValue || WeekAgo > LastTweet)
-                LastTweet = WeekAgo;
+            try
+            {
+                var WeekAgo = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
+                if (!LastTweet.HasValue || WeekAgo > LastTweet)
+                    LastTweet = WeekAgo;
 
-            return
-                from search in _twitterContext.Search
-                where search.Hashtag == "bible" &&
-                      search.Type == SearchType.Search &&
-                      search.ResultType == ResultType.Recent &&
-                      search.Since > LastTweet
-                from entry in search.Entries
-                select entry;
+                return
+                    from search in _twitterContext.Search
+                    where search.Hashtag == "bible" &&
+                          search.Type == SearchType.Search &&
+                          search.PageSize == 200 //&&
+                    //search.Since >= LastTweet.Value.UtcDateTime 
+                    from entry in search.Entries
+                    select entry;
+            }
+            catch (Exception ex)
+            {
+                return Enumerable.Empty<AtomEntry>();
+            }
         }
     }
 }

@@ -5,7 +5,9 @@ using System.Text;
 using BibleOnTwitter.Infrastructure.Model.View;
 using BibleOnTwitter.Infrastructure.DataAccess;
 using NHibernate.Linq;
+using NHibernate.Transform;
 using BibleOnTwitter.Infrastructure.Model.Data;
+using NHibernate.Criterion;
 
 namespace BibleOnTwitter.Infrastructure.Services
 {
@@ -20,27 +22,26 @@ namespace BibleOnTwitter.Infrastructure.Services
 
         public IndexView GetIndexView()
         {
-            var IndexView = new IndexView();
+            var Result = new IndexView { Tweets = Enumerable.Empty<Tweet>() };
+            _SessionProvider.Transactional(Session =>
+            {
+                var TotalTweetCount = Session.QueryOver<Tweet>()                   
+                    
 
-            _SessionProvider.Transactional(session =>
-                {
-                    var Tweets = session.Query<Tweet>()
-                        .OrderByDescending(t => t.CreatedAt)
-                        .Take(50)
-                        .ToList()
-                        .Select(t => new BibleTweet
-                            {
-                                AuthorName = t.Author,
-                                AuthorLink = t.AuthorUrl,
-                                AuthorImageUrl = t.ProfileImageUrl,
-                                Content = t.Title
-                            });
-                        //.ToFuture();
+                Result.TopTags = Session.QueryOver<Reference>()
+                    .Fetch(r => r.Tweets).Eager
+                    .Select(
+                    
 
-                    IndexView.BibleTweets = Tweets;
-                });
 
-            return IndexView;
+                Result.Tweets = Session.QueryOver<Tweet>()
+                    .Fetch(t => t.Author).Eager
+                    .Fetch(t => t.BibleVerseReferences).Eager
+                    .Fetch(t => t.References).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+            });
+            return Result;
         }
     }
 }

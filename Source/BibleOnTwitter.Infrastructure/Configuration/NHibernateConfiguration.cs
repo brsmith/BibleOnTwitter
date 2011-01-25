@@ -30,10 +30,7 @@ namespace BibleOnTwitter.Infrastructure.Configuration
 
         private static void MapEntities(MappingConfiguration Mapping)
         {
-            Mapping.AutoMappings.Add(AutoMap.AssemblyOf<Tweet>(new AutomappingConfiguration())
-                .Conventions.Add(
-                    PrimaryKey.Name.Is(i => i.EntityType.Name + "Id"))
-                );
+            Mapping.FluentMappings.AddFromAssemblyOf<Tweet>();
         }
     }
 }

@@ -11,13 +11,13 @@
 </head>
 <body>
     <div>
-        @foreach (var tweet in @Model.BibleTweets)
+        @foreach (var tweet in @Model.Tweets)
         {
             <div>
-                <h3>@tweet.AuthorName</h3>
+                <h3>@tweet.Author.Name</h3>
                 <span>@tweet.Content</span>    
                 <div>
-                    @foreach (var verse in @tweet.GetBibleVerses())
+                    @foreach (var verse in @tweet.BibleVerseReferences)
                     {
                         <span>Verse: @verse.ToString()</span>
                     }

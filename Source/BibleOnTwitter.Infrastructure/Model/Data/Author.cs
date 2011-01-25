@@ -13,13 +13,20 @@ namespace BibleOnTwitter.Infrastructure.Model.Data
             if (LastSlash == -1)
                 throw new ArgumentException("Not a valid twitter profile url", "ProfileUrl");
 
-            return ProfileUrl.Substring(LastSlash);
+            return ProfileUrl.Substring(LastSlash + 1);
         }
 
-        public virtual Guid TweetId { get; set; }
+        public Author()
+        {
+            Tweets = new List<Tweet>();
+        }
+
+        public virtual Guid AuthorId { get; set; }
         public virtual string Name { get; set; }
         public virtual string ProfileName { get; set; }
         public virtual string ProfileUrl { get; set; }
-        public virtual string ImageUrl { get; set; }        
+        public virtual string ImageUrl { get; set; }
+
+        public virtual IList<Tweet> Tweets { get; set; }
     }
 }
