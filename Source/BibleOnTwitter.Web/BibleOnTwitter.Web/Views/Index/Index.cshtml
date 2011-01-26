@@ -1,7 +1,4 @@
-﻿@{
-    Layout = null;    
-}
-@model BibleOnTwitter.Infrastructure.Model.View.IndexView
+﻿@model BibleOnTwitter.Infrastructure.Model.View.IndexView
 
 <!DOCTYPE html>
 
@@ -11,6 +8,22 @@
 </head>
 <body>
     <div>
+        <ul class="hashtag_menu">
+        @foreach (var Tag in @Model.TopTags.OrderByDescending(t => t.Percentage))
+        {
+            <li style="width: @Tag.Percentage%">       
+                <p>
+                    <span class="tag">
+                        @Tag.HashTag
+                    </span>
+                    <span class="counts">
+                        @Tag.TweetCount / @Tag.TweetTotalCount                     
+                    </span>
+                </p>         
+            </li>
+        }
+        </ul>
+
         @foreach (var tweet in @Model.Tweets)
         {
             <div>

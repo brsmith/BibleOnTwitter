@@ -27,7 +27,8 @@ namespace BibleOnTwitter.Infrastructure.Model.Data
         public virtual IEnumerable<string> ParseReferenceNames()
         {
             return Content.Words()
-                .Where(w => w.StartsWith("#") || w.StartsWith("@"));
+                .Where(w => w.StartsWith("#") || w.StartsWith("@"))
+                .Select(w => w.ToLower().Replace(":", "").Replace(".", "").Replace(",", ""));
         }
 
         public virtual IEnumerable<BibleVerseReference> ParseBibleVerses()

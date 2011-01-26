@@ -25,14 +25,9 @@ namespace BibleOnTwitter.Infrastructure.Services
             var Result = new IndexView { Tweets = Enumerable.Empty<Tweet>() };
             _SessionProvider.Transactional(Session =>
             {
-                var TotalTweetCount = Session.QueryOver<Tweet>()                   
-                    
-
-                Result.TopTags = Session.QueryOver<Reference>()
-                    .Fetch(r => r.Tweets).Eager
-                    .Select(
-                    
-
+                var ATopTags = Session.Query<Reference>()
+                    .Where(r => r.Type == ReferenceType.HashTag)
+                    .Select(r => new { HashTag = r.Name, TweetCount = r.Tweets.Count });
 
                 Result.Tweets = Session.QueryOver<Tweet>()
                     .Fetch(t => t.Author).Eager
@@ -40,6 +35,17 @@ namespace BibleOnTwitter.Infrastructure.Services
                     .Fetch(t => t.References).Eager
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .List();
+
+                var TotalTweetCount = Session.QueryOver<Tweet>()
+                     .RowCount();
+
+                Result.TopTags = ATopTags
+                    .Select(t => new TagReferenceCounter
+                    {
+                        HashTag = t.HashTag,
+                        TweetCount = t.TweetCount,
+                        TweetTotalCount = TotalTweetCount
+                    }).ToArray();
             });
             return Result;
         }
