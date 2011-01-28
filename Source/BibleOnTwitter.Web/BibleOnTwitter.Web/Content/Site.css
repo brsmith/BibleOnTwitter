@@ -8,13 +8,59 @@ body
     list-style: none;
     padding: 0;
     margin-left: 0;
+    width: 300px;
     float: left;
 }
 
 .hashtag_menu li
 {
-    background-color: Red;
-    overflow: visible;
-    -webkit-border-radius: 30;
-    border: 2 solid black;
+    margin: 0 4px 8px 4px;
+}
+
+.hashtag_menu li.more
+{
+    font-family: Verdana;
+    font-size: .75em;
+    font-weight: lighter;
+}
+
+.tag_container .bar
+{
+    background-color: Brown;
+    height: 6px;
+    margin-top: -12px;
+}
+
+.tag_container .tag
+{
+    font-family: Verdana;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.tag_container .count
+{
+    font-family: Monospace;
+    font-size: .5;
+    font-weight: lighter;
+}
+
+.tweets
+{
+    list-style: none;
+    padding: 0;
+    margin-left: 300px;
+}
+
+.tweets p
+{
+    font-family: helvectica;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+span.bible_tag 
+{
+    font-size: 1.5em;
+    color: Brown;
 }

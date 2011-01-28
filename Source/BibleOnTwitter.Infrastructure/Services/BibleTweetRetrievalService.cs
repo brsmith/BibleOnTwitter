@@ -30,7 +30,14 @@ namespace BibleOnTwitter.Infrastructure.Services
                          orderby tweet.PublishedTime descending
                          select tweet.PublishedTime).FirstOrDefault();
 
-                    var Entries = _TwitterService.GetBibleTweets(LastTweetTime)
+                    var Tags = Session.Query<Reference>()
+                        .Where(r => r.Type == ReferenceType.HashTag)
+                        .ToArray()
+                        .OrderByDescending(r => r.Tweets.Count)
+                        .Take(10)                        
+                        .Select(r => r.Name.Substring(1));                        
+
+                    var Entries = _TwitterService.GetBibleTweets(LastTweetTime, Tags)
                         .ToDictionary(e => long.Parse(e.ID.Split(':').Last()));
 
                     Session.QueryOver<Tweet>()

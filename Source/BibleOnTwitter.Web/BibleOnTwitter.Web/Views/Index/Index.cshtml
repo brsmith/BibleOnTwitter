@@ -9,34 +9,39 @@
 <body>
     <div>
         <ul class="hashtag_menu">
-        @foreach (var Tag in @Model.TopTags.OrderByDescending(t => t.Percentage))
+        @foreach (var Tag in @Model.TopTags.OrderByDescending(t => t.Percentage).Take(20))
         {
-            <li style="width: @Tag.Percentage%">       
-                <p>
-                    <span class="tag">
-                        @Tag.HashTag
-                    </span>
-                    <span class="counts">
-                        @Tag.TweetCount / @Tag.TweetTotalCount                     
-                    </span>
-                </p>         
+            <li>       
+                <div class="tag_container">
+                    <div>
+                        <span class="tag">@Tag.HashTag</span>
+                        <span class="count">(@Tag.TweetCount)</span>
+                    </div>
+                    <div class="bar" style="width: @Tag.Percentage%"></div>
+                </div>     
             </li>
         }
+            <li class="more">
+                @(Model.TopTags.Count() - 20) more
+            </li>
         </ul>
-
-        @foreach (var tweet in @Model.Tweets)
-        {
-            <div>
-                <h3>@tweet.Author.Name</h3>
-                <span>@tweet.Content</span>    
-                <div>
-                    @foreach (var verse in @tweet.BibleVerseReferences)
-                    {
-                        <span>Verse: @verse.ToString()</span>
-                    }
-                </div>           
-            </div>
-        }
+            
+        <ul class="tweets">
+            @foreach (var tweet in @Model.Tweets.OrderByDescending(t => t.PublishedTime))
+            {
+                <li>
+                    <p>
+                        @(new HtmlString(tweet.Content.Replace("#bible", "<span class='bible_tag'>#bible</span>").Replace("#Bible", "<span class='bible_tag'>#Bible</span>")))                
+                    </p>    
+                    <div>
+                        @foreach (var verse in @tweet.BibleVerseReferences)
+                        {
+                            <span>Verse: @verse.ToString()</span>
+                        }
+                    </div>           
+                </li>
+            }
+        </ul>
     </div>
 </body>
 </html>

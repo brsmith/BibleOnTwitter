@@ -17,14 +17,21 @@ namespace BibleOnTwitter.Infrastructure.Services
             _twitterContext = twitterContext;
         }
 
-        public IEnumerable<AtomEntry> GetBibleTweets(DateTimeOffset? LastTweet)
+        public IEnumerable<AtomEntry> GetBibleTweets(DateTimeOffset? LastTweet, IEnumerable<string> AlsoHashTags)
+        {
+            var WeekAgo = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
+            if (!LastTweet.HasValue || WeekAgo > LastTweet)
+                LastTweet = WeekAgo;
+
+            return new string[] { "bible" }.Union(AlsoHashTags)
+                .SelectMany(tag => GetTweetsForTag(LastTweet, tag))
+                .Distinct((a, b) => a.ID == b.ID, a => a.ID.GetHashCode());
+        }
+
+        private IEnumerable<AtomEntry> GetTweetsForTag(DateTimeOffset? LastTweet, string Tag)
         {
             try
             {
-                var WeekAgo = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
-                if (!LastTweet.HasValue || WeekAgo > LastTweet)
-                    LastTweet = WeekAgo;
-
                 return
                     from search in _twitterContext.Search
                     where search.Hashtag == "bible" &&

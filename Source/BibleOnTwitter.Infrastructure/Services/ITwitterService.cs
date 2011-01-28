@@ -7,6 +7,6 @@ namespace BibleOnTwitter.Infrastructure.Services
 {
     public interface ITwitterService
     {
-        IEnumerable<AtomEntry> GetBibleTweets(DateTimeOffset? LastTweet);
+        IEnumerable<AtomEntry> GetBibleTweets(DateTimeOffset? LastTweet, IEnumerable<string> AlsoHashTags);
     }
 }
